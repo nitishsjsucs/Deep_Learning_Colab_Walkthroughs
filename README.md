@@ -1,58 +1,52 @@
 # Deep Learning Colab Walkthroughs
 
-A curated portfolio of four end-to-end Colab tutorials covering the foundations of modern deep learning, each accompanied by a code-block-by-code-block video walkthrough on YouTube.
+Four tutorial notebooks written for CMPE 258 (Deep Learning, SJSU, Spring 2026), each with a
+recorded video walkthrough. They are committed as the `.py` files Colab produces via
+**File → Download → Download .py**, so the prose lives in string literals and the outputs (plots,
+training logs) are *not* included — you have to run them to see results.
 
-**Author**: Nitish Chowdary
+Everything is PyTorch. The datasets are small and generated or downloaded inside the scripts.
 
----
+## What's here
 
-## Index
-
-| # | Topic | Colab source | Video walkthrough |
+| # | File | What it does | Video |
 |---|---|---|---|
-| 1 | **GNN Fundamentals** — Graphs, message passing, GCN from scratch on Cora | [`01_gnn_fundamentals/`](01_gnn_fundamentals/final_gnn_fundamentals_tutorial.py) | [youtu.be/7WpgMJvHVts](https://youtu.be/7WpgMJvHVts) |
-| 2 | **10 Years of Deep Learning in NLP** — Tokenization → embeddings → RNNs → Transformers → ChatGPT | [`02_nlp_10_years/`](02_nlp_10_years/final_nlp_deep_learning_10_years_tutorial.py) | [youtu.be/Jrup2jDrFuo](https://youtu.be/Jrup2jDrFuo) |
-| 3 | **RNN, LSTM, GRU, WaveNet — Zero to Hero on Sequence Modeling** — All four architectures built from scratch and compared on the same character-level task | [`03_rnn_lstm_gru_wavenet/`](03_rnn_lstm_gru_wavenet/final_rnn_lstm_gru_wavenet_zero_to_hero.py) | [youtu.be/aEEFHZlwRgk](https://youtu.be/aEEFHZlwRgk) |
-| 4 | **Vision Transformers & The Frontier of Computer Vision** — Attention → ViT → CLIP → DINOv2 → SAM | [`04_vision_transformers/`](04_vision_transformers/final_vision_transformers_tutorial.py) | [youtu.be/j3Ce86Ld1ZQ](https://youtu.be/j3Ce86Ld1ZQ) |
+| 1 | `01_gnn_fundamentals/final_gnn_fundamentals_tutorial.py` | Graph representations, the message-passing idea, and a graph convolution layer written twice — once in NumPy, once in PyTorch — then a 2-layer GCN trained on toy graphs and on Zachary's Karate Club network. | [link](https://youtu.be/7WpgMJvHVts) |
+| 2 | `02_nlp_10_years/final_nlp_deep_learning_10_years_tutorial.py` | A tour from tokenization to ChatGPT: a hand-written tokenizer, embedding geometry and analogies, a NumPy RNN, LSTM/GRU gating, attention, a miniature Transformer, and a discussion of pretraining, instruction tuning and RLHF. | [link](https://youtu.be/Jrup2jDrFuo) |
+| 3 | `03_rnn_lstm_gru_wavenet/final_rnn_lstm_gru_wavenet_zero_to_hero.py` | Five sequence models — RNN, LSTM, GRU, deep LSTM and a dilated-causal-convolution WaveNet — built from scratch and trained on the same inline character-level corpus, then compared on loss, parameter count and training time. | [link](https://youtu.be/aEEFHZlwRgk) |
+| 4 | `04_vision_transformers/final_vision_transformers_tutorial.py` | Scaled dot-product and multi-head attention, patch embedding and a full ViT built from scratch, followed by a survey of CLIP, DINOv2 and SAM. | [link](https://youtu.be/j3Ce86Ld1ZQ) |
 
----
+A few notes on what is and isn't executed, since the scripts are longer than the code that actually
+runs:
 
-## Repository layout
+- Notebook 1 trains on synthetic graphs and the Karate Club graph from `networkx`. GraphSAGE, GAT
+  and GIN are named only as topics for a follow-up part, which is not in this repo.
+- The embeddings in notebook 2 are constructed by hand to make the vector-arithmetic plots readable;
+  nothing is trained on a real corpus there. The RNN and Transformer sections do run.
+- In notebook 4, the ViT is built and run from scratch and DINOv2 is pulled from `torch.hub`. The
+  CLIP section is wrapped in a `try/except ImportError` and demonstrates the API on a random tensor
+  rather than a real image; SAM is shown as a printed code sample only, not executed.
 
+## Running it
+
+Each file is a Colab export, so the simplest path is to open a new Colab notebook and paste the file
+in, or upload the `.py` and run it. Locally:
+
+```bash
+pip install torch torchvision numpy matplotlib seaborn networkx scikit-learn
+python 03_rnn_lstm_gru_wavenet/final_rnn_lstm_gru_wavenet_zero_to_hero.py
 ```
-.
-├── 01_gnn_fundamentals/
-│   └── final_gnn_fundamentals_tutorial.py
-├── 02_nlp_10_years/
-│   └── final_nlp_deep_learning_10_years_tutorial.py
-├── 03_rnn_lstm_gru_wavenet/
-│   └── final_rnn_lstm_gru_wavenet_zero_to_hero.py
-└── 04_vision_transformers/
-    └── final_vision_transformers_tutorial.py
-```
 
-Each `.py` file is a self-contained Colab notebook exported in script form. To run, either:
+Notebook 1 also wants `networkx`; notebook 4 pulls model weights over the network. A GPU makes
+notebooks 2, 3 and 4 much faster. The original Colab URLs are in the docstring at the top of each
+file.
 
-- **Open directly in Colab** — upload the `.py` file or paste its contents into a new Colab notebook (the cell delimiters `# %%` are preserved).
-- **Run locally** — `python <file>.py` after installing the dependencies imported at the top of each script (PyTorch, torchvision, matplotlib, etc.). A GPU is strongly recommended for notebooks 2, 3, and 4.
+## Attribution
 
----
-
-## Notebook summaries
-
-### 1. GNN Fundamentals
-Builds graph neural networks from first principles. Covers graph representation, the message-passing paradigm, a hand-written graph convolution layer, and a full 2-layer GCN trained on the Cora citation network. Ends with a side-by-side comparison of GCN, GraphSAGE, and GAT.
-
-### 2. 10 Years of Deep Learning in NLP
-A guided tour from 2014-era word embeddings to 2024-era large language models. Implements character and subword tokenization, Word2Vec-style embeddings, a vanilla RNN, an LSTM, the attention mechanism, a miniature Transformer, and discusses pretraining, instruction tuning, and RLHF.
-
-### 3. RNN, LSTM, GRU, WaveNet — Zero to Hero
-Builds and trains five sequence models — vanilla RNN, LSTM, GRU, deep LSTM, and a dilated-causal-convolution WaveNet — on the *same* character-level corpus with identical hyper-parameters, then compares loss curves, parameter counts, and training time on one chart.
-
-### 4. Vision Transformers & The Frontier of Computer Vision
-Builds scaled dot-product attention, multi-head attention, patch embedding, and a complete Vision Transformer from scratch, then surveys the three foundation models defining computer vision in 2024 — **CLIP** (vision-language contrastive pretraining), **DINOv2** (self-supervised features), and **SAM** (promptable segmentation).
-
----
+The sequence-models notebook (3) follows the structure of the RNN chapters in Aurélien Géron's
+*Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow* (O'Reilly), reworked in
+PyTorch. Notebook 4 uses DINOv2 (`facebookresearch/dinov2`) via `torch.hub` and references OpenAI's
+CLIP and Meta's Segment Anything.
 
 ## License
 
